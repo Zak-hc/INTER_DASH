@@ -1,0 +1,41 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+
+# Chargement des données à partir d'un fichier CSV.
+data = pd.read_csv('votre_fichier.csv')
+
+# Séparer les caractéristiques (X) et la cible (y) des données
+X = data[['var_exogene', 'var_2_exo', ...]]
+y = data['var_endogene'] 
+
+# Régression linéaire
+lin_reg = LinearRegression()
+lin_reg.fit(X, y)
+
+# Régression non linéaire (polynomiale) avec degré 2 par exemple
+poly_features = PolynomialFeatures(degree=2, include_bias=False)
+X_poly = poly_features.fit_transform(X)
+lin_reg_poly = LinearRegression()
+lin_reg_poly.fit(X_poly, y)
+
+# Visualisation des données et des modèles
+plt.figure(figsize=(10, 6))
+plt.scatter(X['feature1'], y, color='blue', label='Données')
+
+# Modèle linéaire
+plt.plot(X['var_exogene'], lin_reg.predict(X), color='red', label='Régression linéaire')
+
+# Modèle non linéaire (polynomiale)
+X_new = np.linspace(X['var_exogene'].min(), X['var_exogene'].max(), 100).reshape(-1, 1)
+X_new_poly = poly_features.transform(X_new)
+plt.plot(X_new, lin_reg_poly.predict(X_new_poly), color='green', label='Régression non linéaire (polynomiale)')
+
+plt.xlabel('var_exogene')
+plt.ylabel('target')
+plt.title('Régression linéaire et non linéaire')
+plt.legend()
+plt.grid(True)
+plt.show()
